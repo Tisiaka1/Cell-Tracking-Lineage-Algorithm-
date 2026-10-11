@@ -58,3 +58,9 @@ On-the-fly validation includes dynamic padding and Gaussian blurring using MONAI
 <h2>Linear Tracking</h2>
 Integrated a linear assignment algorithm lapjv to draw edges between the predicted 3D cell nodes across sequential time points.
 
+
+
+<h2> Results : </h2>
+
+Link to the csv file ( I promise its safe to click, i am not a weirdo)  : https://docs.google.com/spreadsheets/d/1Tb96eQm5c0gNjqTsyYBxdKdh99rejJeaV4rOzehNTro/edit?usp=sharing
+
