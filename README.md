@@ -12,7 +12,7 @@ The system is optimized for high-performance computing, emphasizing memory-effic
 
 <b>Memory-Efficient Lazy Loading:</b> Implemented a custom PyTorch Dataset using Zarr to stream massive 3D volume chunks on-the-fly, bypassing standard RAM limitations for handling continuous time-series microscopy data.
 
-<b>Target Heatmap Generation:</b> Engineered a custom label-generation system using ###scipy.ndimage.gaussian_filter### to convert sparse 3D spatial coordinates( X,Y,Z)  into smooth probability heatmaps, providing gradient soft targets for the model ( 0 being background and 1 indicating a cell ) .
+<b>Target Heatmap Generation:</b> Engineered a custom label-generation system using<b>scipy.ndimage.gaussian_filter</b> to convert sparse 3D spatial coordinates( X,Y,Z)  into smooth probability heatmaps, providing gradient soft targets for the model ( 0 being background and 1 indicating a cell ) .
 
 <b>Optimized 3D Architecture:</b> Built a custom 3D U-Net in PyTorch with Instance Normalization and max-pooling bottlenecks to efficiently capture volumetric spatial relationships.
 
@@ -30,7 +30,7 @@ The system is optimized for high-performance computing, emphasizing memory-effic
 
 <b>Environment: CUDA, Google Colab</b>
 
-Pipeline Architecture
+<h2>Pipeline Architecture</h2>
 <b>1. Data Augmentation</b>
 Utilizes the MONAI library to apply dynamic, 3D-aware augmentations to prevent overfitting on complex volumetric data.
 
@@ -63,4 +63,6 @@ Integrated a linear assignment algorithm lapjv to draw edges between the predict
 <h2> Results : </h2>
 
 Link to the csv file ( I promise its safe to click, i am not a weirdo)  : https://docs.google.com/spreadsheets/d/1Tb96eQm5c0gNjqTsyYBxdKdh99rejJeaV4rOzehNTro/edit?usp=sharing
+
+For more information on research competition : https://www.kaggle.com/competitions/biohub-cell-tracking-during-development
 
