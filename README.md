@@ -3,7 +3,7 @@
 
 # 3D Cell Tracking Pipeline (BioHub)
 
-##Overview
+<h2>Overview</h2>
 This project implements an input - output deep learning pipeline designed to detect and track cells in 3D microscopy time-series data. Built to handle the massive data constraints of 3D biological imaging, this pipeline utilizes a custom 3D U-Net architecture to predict probabilistic heatmaps of cell locations, forming the foundational 'cell detection' step for temporal cell tracking.
 
 The system is optimized for high-performance computing, emphasizing memory-efficient data loading, mixed-precision training, and  spatial feature extraction.
