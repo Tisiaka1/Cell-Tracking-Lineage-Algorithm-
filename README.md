@@ -8,54 +8,53 @@ This project implements an input - output deep learning pipeline designed to det
 
 The system is optimized for high-performance computing, emphasizing memory-efficient data loading, mixed-precision training, and  spatial feature extraction.
 
-##Key Engineering Highlights
+<h2>Key Engineering Highlights</h2>
 
-Memory-Efficient Lazy Loading: Implemented a custom PyTorch Dataset using Zarr to stream massive 3D volume chunks on-the-fly, bypassing standard RAM limitations for handling continuous time-series microscopy data.
+<b>Memory-Efficient Lazy Loading:</b> Implemented a custom PyTorch Dataset using Zarr to stream massive 3D volume chunks on-the-fly, bypassing standard RAM limitations for handling continuous time-series microscopy data.
 
-Target Heatmap Generation: Engineered a custom label-generation system using ###scipy.ndimage.gaussian_filter### to convert sparse 3D spatial coordinates( X,Y,Z)  into smooth probability heatmaps, providing gradient soft targets for the model ( 0 being background and 1 indicating a cell ) .
+<b>Target Heatmap Generation:</b> Engineered a custom label-generation system using ###scipy.ndimage.gaussian_filter### to convert sparse 3D spatial coordinates( X,Y,Z)  into smooth probability heatmaps, providing gradient soft targets for the model ( 0 being background and 1 indicating a cell ) .
 
-Optimized 3D Architecture: Built a custom 3D U-Net in PyTorch with Instance Normalization and max-pooling bottlenecks to efficiently capture volumetric spatial relationships.
+<b>Optimized 3D Architecture:</b> Built a custom 3D U-Net in PyTorch with Instance Normalization and max-pooling bottlenecks to efficiently capture volumetric spatial relationships.
 
-Custom Loss Formulation: Implemented Adaptive Wing Loss from scratch to heavily penalize errors in heatmap peaks while remaining tuned  to background noise, improving the localization accuracy of tight cell clusters.
+<b>Custom Loss Formulation:</b> Implemented Adaptive Wing Loss from scratch to heavily penalize errors in heatmap peaks while remaining tuned  to background noise, improving the localization accuracy of tight cell clusters.
 
-High-Performance Training: Leveraged PyTorch Automatic Mixed Precision (AMP) and gradient scaling to maximize GPU utilization and batch  during training.
+<b>High-Performance Training:</b> Leveraged PyTorch Automatic Mixed Precision (AMP) and gradient scaling to maximize GPU utilization and batch  during training.
 
-Tech Stack
+<h2>Tech Stack</h2>
 
-Deep Learning: PyTorch, TorchAMP
+<b>Deep Learning</b>: PyTorch, TorchAMP</b>
 
-Medical/3D Imaging: MONAI (Medical Open Network for AI)
+<b>Medical/3D Imaging: MONAI (Medical Open Network for AI)</b>
 
-Data Processing & Scientific Computing: Zarr, SciPy, NumPy, Pandas
+<b>Data Processing & Scientific Computing: Zarr, SciPy, NumPy, Pandas</b>
 
-Environment: CUDA, Google Colab
+<b>Environment: CUDA, Google Colab</b>
 
 Pipeline Architecture
-1. Data Augmentation
+<b>1. Data Augmentation</b>
 Utilizes the MONAI library to apply dynamic, 3D-aware augmentations to prevent overfitting on complex volumetric data.
 
 Transformations include RandZoomd (trilinear interpolation), RandRotate90d, and NormalizeIntensityd.
 
-2. Ground Truth & Data Streaming
-Microscopy datasets are very very  large(87GB) . The Custom PyTorch Dataset class addresses this by lazily fetching specific 16×Z×Y×X chunks directly from compressed .zarr directories.
+<b>2. Ground Truth & Data Streaming</b>
+Microscopy datasets are very very very did i say very.. large(87GB) . The Custom PyTorch Dataset class addresses this by lazily fetching specific 16×Z×Y×X chunks directly from compressed .zarr directories.
 
 Ground truth coordinates are dynamically converted into 3D Gaussian heatmaps during the __getitem__ call to ensure labels are perfectly aligned with the augmented input chunks.
 
-3. Model Architecture (3D U-Net)
+<b>3. Model Architecture (3D U-Net)</b>
 A fully custom 3D U-Net designed for volumetric regression:
 
-Encoder: Cascading ConvBlock modules with 3D Convolutions, Instance Normalization, and ReLU activations, followed by 1×2×2 Max Pooling.
+<b>Encoder: Cascading ConvBlock modules with 3D Convolutions, Instance Normalization, and ReLU activations, followed by 1×2×2 Max Pooling.</b>
 
-Decoder: Trilinear Upsampling combined with skip connections from the encoder to retain high-frequency spatial details.
+<b>Decoder: Trilinear Upsampling combined with skip connections from the encoder to retain high-frequency spatial details.</b>
 
-Output: A 1×1×1 3D Convolution outputting the final predicted probability map.
+<b>Output: A 1×1×1 3D Convolution outputting the final predicted probability map.</b>
 
-4. Training Loop & Validation
+<b>4. Training Loop & Validation</b>
 Utilizes a highly optimized PyTorch training loop with torch.amp.autocast for mixed-precision training, drastically reducing VRAM usage and speeding up step times.
 
 On-the-fly validation includes dynamic padding and Gaussian blurring using MONAI's GaussianFilter to smooth predictions before calculating the validation loss against the normalized ground truth peaks.
 
-Next Steps / Future Implementation
-Temporal Tracking: Integrate a linear assignment algorithm (e.g., Jonker-Volgenant / lapjv) to draw edges between the predicted 3D cell nodes across sequential time points, completing the full spatial-temporal tracking objective.
+<h2>Linear Tracking</h2>
+Integrated a linear assignment algorithm lapjv to draw edges between the predicted 3D cell nodes across sequential time points.
 
-Inference Optimization: Export the trained weights and build an inference pipeline optimized for batch-processing test sets to finalize submission datasets.
